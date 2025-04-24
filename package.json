@@ -1,0 +1,22 @@
+{
+    "name": "your-inventory-app",
+    "version": "1.0.0",
+    "description": "Electron + Tailwind + SQLite inventory app.",
+    "main": "electron/main.js",
+    "scripts": {
+      "start": "concurrently \"npm:build:css\" \"npm:electron:start\"",
+      "build:css": "npx tailwindcss -i ./src/styles.css -o ./src/dist/tailwind.css --watch",
+      "electron:start": "electron ."
+    },
+    "devDependencies": {
+      "autoprefixer": "^10.4.14",
+      "concurrently": "^7.2.2",
+      "electron": "^25.0.0",
+      "postcss": "^8.4.23",
+      "tailwindcss": "^3.3.0"
+    },
+    "dependencies": {
+      "sqlite3": "^5.1.6"
+    }
+  }
+  
