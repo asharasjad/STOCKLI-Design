@@ -19,52 +19,30 @@
           <span class="material-icons-outlined text-xl align-middle">home</span>
         </a>
       </div>
-
-      <!-- Right side: Dark Mode Toggle + Settings + Welcome + Profile Image -->
+      <!-- Right side: Dark Mode Toggle, Alerts, Settings, Profile -->
       <div class="relative flex items-center space-x-3">
-        <!-- Dark Mode Toggle Button -->
         <button id="darkModeToggle" class="p-1 text-gray-700 dark:text-gray-300 hover:text-blue-600 flex items-center" title="Toggle Dark Mode">
           <span class="material-icons-outlined text-xl align-middle">dark_mode</span>
         </button>
-
-        <!-- Bell Icon for Alerts -->
-        <div class="relative">
-          <button id="alertBell" class="p-1 text-gray-700 dark:text-gray-300 hover:text-blue-600 flex items-center" title="Alerts">
-            <span class="material-icons-outlined text-xl align-middle">notifications</span>
-          </button>
-          <!-- Alerts Dropdown -->
-          <div id="alertsDropdown" class="hidden absolute right-0 mt-2 w-64 bg-white dark:bg-gray-800 rounded-lg shadow-lg">
-            <div class="p-4 border-b border-gray-200 dark:border-gray-700">
-              <h3 class="text-sm font-semibold text-gray-800 dark:text-gray-200">Alerts</h3>
-            </div>
-            <ul class="divide-y divide-gray-200 dark:divide-gray-700">
-              <li class="p-4 text-sm text-gray-700 dark:text-gray-300">Low stock on Product A</li>
-              <li class="p-4 text-sm text-gray-700 dark:text-gray-300">New order received</li>
-              <li class="p-4 text-sm text-gray-700 dark:text-gray-300">System update available</li>
-            </ul>
-            <div class="p-4 text-center">
-              <a href="#" class="text-sm text-blue-600 hover:underline">View all alerts</a>
-            </div>
+        <button id="alertBell" class="p-1 text-gray-700 dark:text-gray-300 hover:text-blue-600 flex items-center" title="Alerts">
+          <span class="material-icons-outlined text-xl align-middle">notifications</span>
+        </button>
+        <!-- Alerts Dropdown -->
+        <div id="alertsDropdown" class="hidden absolute right-0 mt-2 w-64 bg-white dark:bg-gray-800 rounded-lg shadow-lg">
+          <div class="p-4 border-b border-gray-200 dark:border-gray-700">
+            <h3 class="text-sm font-semibold text-gray-800 dark:text-gray-200">Alerts</h3>
           </div>
+          <ul id="alertsList" class="divide-y divide-gray-200 dark:divide-gray-700">
+            <!-- Alerts will be inserted here by JavaScript -->
+          </ul>
         </div>
-
-        <!-- Settings Button -->
         <a href="../../pages/settings/system-settings.html" class="p-1 text-gray-700 dark:text-gray-300 hover:text-blue-600 flex items-center" title="Settings">
           <span class="material-icons-outlined text-xl align-middle">settings</span>
         </a>
-
-        <!-- Welcome Text -->
         <span class="text-sm text-gray-700 dark:text-gray-300">
           Welcome, <span class="font-medium">John Doe</span>
         </span>
-
-        <!-- Profile Image -->
         <img src="../../images/anonomous-profile-logo.png" alt="Profile Image" class="w-8 h-8 rounded-full border border-gray-300 dark:border-gray-600 cursor-pointer" id="profileImage" />
-
-        <!-- Dropdown Menu -->
-        <div id="dropdownMenu" class="hidden absolute top-full right-0 mt-2 w-48 bg-white dark:bg-gray-800 rounded-lg shadow-lg">
-          <button id="loginButton" class="block w-full text-left px-4 py-2 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700">Login</button>
-        </div>
       </div>
     </header>
 
@@ -181,6 +159,30 @@
     </div>
 
     <!-- Scripts -->
+    <script>
+      // Toggle alerts dropdown when bell is clicked
+      document.getElementById("alertBell").addEventListener("click", () => {
+        const dropdown = document.getElementById("alertsDropdown");
+        dropdown.classList.toggle("hidden");
+      });
+
+      // Fetch alerts from the backend
+      document.addEventListener("DOMContentLoaded", () => {
+        fetch("http://localhost:3000/api/alerts")
+          .then(response => response.json())
+          .then(alerts => {
+            const alertsList = document.getElementById("alertsList");
+            alertsList.innerHTML = "";
+            alerts.forEach(alert => {
+              const li = document.createElement("li");
+              li.className = "p-4 text-sm text-gray-700 dark:text-gray-300";
+              li.textContent = alert.message;
+              alertsList.appendChild(li);
+            });
+          })
+          .catch(err => console.error("Error fetching alerts:", err));
+      });
+    </script>
     <script src="../../scripts/dropdown.js"></script>
     <script src="../../scripts/darkmode.js"></script>
     <script src="../../scripts/highlight-active.js"></script>
